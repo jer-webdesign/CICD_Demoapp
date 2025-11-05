@@ -34,3 +34,9 @@ jobs:
       - name: Build Project
         run: npm run build # Command to build the project
 
+      - name: Display Context
+        run: |
+           echo "----Github Context-----"
+           echo '${{toJSON(github)}}'
+
+
