@@ -39,4 +39,25 @@ jobs:
            echo "----Github Context-----"
            echo '${{toJSON(github)}}'
 
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: build  # This job will run after 'build' job is successful
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Build and Deploy to Vercel
+        run: |
+          vercel pull --yes --environment=preview --token=${{secrets.VERCEL_TOKEN}}
+          vercel build --token=${{secrets.VERCEL_TOKEN}}
+          vercel deploy --prebuild --token=${{secrets.VERCEL_TOKEN}}
+        env:
+          VERCEL_TOKEN: ${{secrets.VERCEL_TOKEN}}        
+          VERCEL_ORG_ID: ${{secrets.VERCEL_ORG_ID}}
+          VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
 
